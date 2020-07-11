@@ -1,0 +1,2 @@
+# Magic Square Generator
+
