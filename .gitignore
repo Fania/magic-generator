@@ -2,3 +2,5 @@
 *.exe
 *.hi
 *.o
+comp/
+data/

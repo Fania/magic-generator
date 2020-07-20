@@ -56,6 +56,34 @@ rotate270 xs = concat $ reverse cols
         rows = getChunks n xs
         cols = transpose rows
 
+cmpl :: Int -> Int -> Int
+cmpl n x = ((n^2) + 1) - x
+
+complement :: [Int] -> [Int]
+complement ns = map (cmpl n) ns
+  where n = getOrder ns
+
+getDiag1 :: [[Int]] -> [Int]
+getDiag1 xs = zipWith (!!) xs [0..]
+
+getDiag2 :: [[Int]] -> [Int]
+getDiag2 xs = zipWith (!!) xs [n-1,n-2..0]
+  where n = length xs
+
+isMagic :: [Int] -> Bool
+isMagic xs = all (\x -> sum x == ms) rows
+          && all (\x -> sum x == ms) cols
+          && sum diag1 == ms
+          && sum diag2 == ms
+  where n = getOrder xs
+        rows = getChunks n xs
+        cols = transpose rows
+        diag1 = getDiag1 rows
+        diag2 = getDiag2 rows
+        ms = sum $ take n xs
+
+
+
 -- identity
 -- 2,10,19,11,23
 -- 12,25,7,18,3
@@ -78,51 +106,3 @@ test =
   (rotate180 $ head lsx) == [13,4,22,9,17,5,24,16,6,14,21,8,1,15,20,3,18,7,25,12,23,11,19,10,2]
   &&
   (rotate270 $ head lsx) == [23,3,21,5,13,11,18,8,24,4,19,7,1,16,22,10,25,15,6,9,2,12,20,14,17]
-
-
--- main = do
-  -- s <- readFile "order5-1-2.txt"
-  -- print $ getOrder $ head lsx
-  -- print $ length order4s
-  -- x <- getArgs
-  -- y <- [ z::Int | z <- words getArgs ]
-  -- print $ transform3 [ x | x <- words getArgs ]
-
-
-
-
-
-
--- cmpl order num
--- e.g. cmpl 4 1 = 16
--- cmpl :: Int -> Int -> Int
--- cmpl n x = ((n^2) + 1) - x
-
--- -- complement square -> square
--- complement :: [Int] -> [Int]
--- complement ns = Data.List.map (cmpl 4) ns
-
--- complement $ order4s !! 0
-
-
--- transform :: [Int] -> [[Int]]
--- transform ns = [ns,
---                 mirrorLR ns,
---                 mirrorUD ns,
---                 mirrorD1 ns,
---                 mirrorD2 ns,
---                 rotate90 ns,
---                 rotate180 ns,
---                 rotateM90 ns]
-
--- -- /8
--- reduceD4 :: [[Int]] -> [[Int]]
--- reduceD4 [] = []
--- reduceD4 (n:ns) = n : reduceD4 (ns \\ (tail $ transform n))
-
--- -- /2
--- removeCompls :: [[Int]] -> [[Int]]
--- removeCompls [] = []
--- removeCompls (n:ns) = n : removeCompls (delete (complement n) ns)
-
-
