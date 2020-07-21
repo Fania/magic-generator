@@ -1,4 +1,5 @@
 module Transformations (
+  getOrder,
   isMagic,
   isOdd,
   isDoublyEven,
