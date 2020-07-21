@@ -1,6 +1,16 @@
+module Transformations (
+  isMagic,
+  isOdd,
+  isDoublyEven,
+  isSinglyEven,
+  isSelfComplementary,
+  isSymmetric,
+  isPanMagic,
+  isUltraMagic,
+  isBordered
+) where
+
 import Data.List
-import System.IO
-import System.Environment
 
 
 lsx :: [[Int]]
@@ -9,14 +19,88 @@ lsx = [[2,10,19,11,23,12,25,7,18,3,20,15,1,8,21,14,6,16,24,5,17,9,22,4,13],[2,15
 demo :: [Int]
 demo = [2,10,19,11,23,12,25,7,18,3,20,15,1,8,21,14,6,16,24,5,17,9,22,4,13]
 
+o5 :: [Int]
+o5 = [18,22,10,14,1,9,11,3,17,25,2,20,24,6,13,21,8,12,5,19,15,4,16,23,7]
+
+b7 :: [Int]
+b7 = [64,4,9,54,63,3,10,53,60,15,16,47,48,49,20,5,7,44,22,42,41,25,21,58,51,33,37,29,30,28,38,14,6,32,34,35,36,31,27,59,8,26,40,24,23,43,39,57,52,45,46,18,17,19,50,13,12,61,56,11,2,62,55,1]
+
+
+isMagic :: [Int] -> Bool
+isMagic ms = all (\x -> sum x == mc) rows
+          && all (\x -> sum x == mc) cols
+          && sum diag1 == mc
+          && sum diag2 == mc
+  where n = getOrder ms
+        rows = getChunks n ms
+        cols = transpose rows
+        diag1 = getDiag1 rows
+        diag2 = getDiag2 rows
+        mc = magicConstant n
+
+
+isOdd :: [Int] -> Bool
+isOdd ms = odd n
+  where n = getOrder ms
+
+isDoublyEven :: [Int] -> Bool
+isDoublyEven ms = mod n 4 == 0
+  where n = getOrder ms
+
+isSinglyEven :: [Int] -> Bool
+isSinglyEven ms = mod (n+2) 4 == 0
+  where n = getOrder ms
+
+-- Complement is rotation or reflection of original
+isSelfComplementary :: [Int] -> Bool
+isSelfComplementary ms = isMagic $ complement ms
+
+-- Do not exist for singly even orders.
+-- Will be self-complimentary too.
+-- a.k.a. associative
+isSymmetric :: [Int] -> Bool
+isSymmetric ms = (not $ isSinglyEven ms)
+              && all (\x -> cmpl n (fst x) == (snd x)) edps
+  where n = getOrder ms
+        edps = equidistantPairs ms
+
+-- Do not exist for singly even orders.
+-- a.k.a. pandiagonal, perfect, diabolic, Jain, Nasik
+isPanMagic :: [Int] -> Bool
+isPanMagic ms = (not $ isSinglyEven ms)
+             && all (\d -> sum d == mc) (brokenDiags ms)
+  where n = getOrder ms
+        mc = magicConstant n
+
+-- Only for orders n ≥ 5.
+isUltraMagic :: [Int] -> Bool
+isUltraMagic ms = n > 4 && isPanMagic ms && isSymmetric ms
+  where n = getOrder ms
+
+-- Only for orders n ≥ 5.
+isBordered :: [Int] -> Bool
+isBordered ms = n > 4
+             && all (\x -> sum x == mc) rows
+             && all (\x -> sum x == mc) cols
+             && sum diag1 == mc
+             && sum diag2 == mc
+  where n = getOrder ms
+        rows = removeBorders ms
+        cols = transpose rows
+        diag1 = getDiag1 rows
+        diag2 = getDiag2 rows
+        mc = sum $ rows !! 0
+
+
+
 -- HELPER FUNCTIONS
 
 getChunks :: Int -> [Int] -> [[Int]]
 getChunks n [] = []
-getChunks n xs = (take n xs) : (getChunks n (drop n xs))
+getChunks n ms = (take n ms) : (getChunks n (drop n ms))
 
 getOrder :: [Int] -> Int
-getOrder xs = floor $ sqrt $ fromIntegral $ length xs
+getOrder ms = floor $ sqrt $ fromIntegral $ length ms
 
 cmpl :: Int -> Int -> Int
 cmpl n x = ((n^2) + 1) - x
@@ -26,49 +110,16 @@ complement ns = map (cmpl n) ns
   where n = getOrder ns
 
 getDiag1 :: [[Int]] -> [Int]
-getDiag1 xs = zipWith (!!) xs [0..]
+getDiag1 ms = zipWith (!!) ms [0..]
 
 getDiag2 :: [[Int]] -> [Int]
-getDiag2 xs = zipWith (!!) xs [n-1,n-2..0]
-  where n = length xs
+getDiag2 ms = zipWith (!!) ms [n-1,n-2..0]
+  where n = length ms
 
 magicConstant :: Int -> Int
 magicConstant n = floor $ (fromIntegral n) * ( x / y )
   where x = fromIntegral (n^2 + 1) :: Float
         y = fromIntegral 2 :: Float
-
-isMagic :: [Int] -> Bool
-isMagic xs = all (\x -> sum x == ms) rows
-          && all (\x -> sum x == ms) cols
-          && sum diag1 == ms
-          && sum diag2 == ms
-  where n = getOrder xs
-        rows = getChunks n xs
-        cols = transpose rows
-        diag1 = getDiag1 rows
-        diag2 = getDiag2 rows
-        ms = magicConstant n
-
-
--- CATEGORIES
-
-isSelfComplementary :: [Int] -> Bool
-isSelfComplementary xs = isMagic $ complement xs
-
-equidistantPairs :: [Int] -> [(Int,Int)]
-equidistantPairs xs 
-  | even l = zip f s
-  | odd l  = zip f s ++ [(m,m)]
-  where l = length xs
-        h   = div l 2
-        f = take h xs
-        s = reverse $ drop h xs
-        m = last s
-
-isSymmetric :: [Int] -> Bool
-isSymmetric xs = all (\x -> cmpl n (fst x) == (snd x)) eps
-  where n = getOrder xs
-        eps = equidistantPairs xs
 
 shuffle :: Int -> [Int] -> [Int]
 shuffle 0 xs = xs
@@ -83,37 +134,46 @@ shuffleUp n [] = []
 shuffleUp n (r:rs) = [shuffle n r] ++ (shuffleUp (n+1) rs)
 
 brokenDiags1 :: [Int] -> [[Int]]
-brokenDiags1 xs = init $ transpose shrows
-  where n = getOrder xs
-        rows = getChunks n xs
+brokenDiags1 ms = init $ transpose shrows
+  where n = getOrder ms
+        rows = getChunks n ms
         shrows = shuffleDown n rows
 
 brokenDiags2 :: [Int] -> [[Int]]
-brokenDiags2 xs = tail $ transpose shrows
-  where n = getOrder xs
-        rows = getChunks n xs
+brokenDiags2 ms = tail $ transpose shrows
+  where n = getOrder ms
+        rows = getChunks n ms
         shrows = shuffleUp 0 rows
 
 brokenDiags :: [Int] -> [[Int]]
-brokenDiags xs = brokenDiags1 xs ++ brokenDiags2 xs
-        
-o5 :: [Int]
-o5 = [18,22,10,14,1,9,11,3,17,25,2,20,24,6,13,21,8,12,5,19,15,4,16,23,7]
+brokenDiags ms = brokenDiags1 ms ++ brokenDiags2 ms
 
-isPandiagonal :: [Int] -> Bool
-isPandiagonal xs = all (\d -> sum d == ms) (brokenDiags xs)
-  where n = getOrder xs
-        ms = magicConstant n
+removeBorders :: [Int] -> [[Int]]
+removeBorders ms = transpose $ map (tail . init) midCols
+  where n = getOrder ms
+        rows = getChunks n ms
+        cols = transpose rows
+        midCols = tail $ init cols
+
+equidistantPairs :: [Int] -> [(Int,Int)]
+equidistantPairs ms 
+  | even l = zip f s
+  | odd l  = zip f s ++ [(m,m)]
+  where l = length ms
+        h   = div l 2
+        f = take h ms
+        s = reverse $ drop h ms
+        m = last s
 
 
 
--- Ultra associative and pandiagonal. Only for orders n ≥ 5.
 
--- Bordered remains magic when the rows and columns at the outer edge is removed. They are also called concentric bordered magic squares if removing a border of a square gives another smaller bordered magic square. Only for orders n ≥ 5.
+-- Most-perfect magic square when it is a pandiagonal magic square with two further properties (i) each 2×2 subsquare add to 1/k of the magic constant where n = 4k, and (ii) all pairs of integers distant n/2 along any diagonal (major or broken) are complementary (i.e. they sum to n2 + 1). Only for squares of doubly even order. All pandiagonal squares of order 4 are also most perfect.
+
+
 
 -- Composite can be partitioned into smaller magic subsquares, wholly or partly, which may or may not overlap with each other. By this definition, bordered magic squares are also composite magic squares.
 
--- Most-perfect magic square when it is a pandiagonal magic square with two further properties (i) each 2×2 subsquare add to 1/k of the magic constant where n = 4k, and (ii) all pairs of integers distant n/2 along any diagonal (major or broken) are complementary (i.e. they sum to n2 + 1). Only for squares of doubly even order. All pandiagonal squares of order 4 are also most perfect.
 
 -- Multimagic remains magic even if all its numbers are replaced by their k-th power for 1 ≤ k ≤ P. They are also known as P-multimagic square or satanic squares. They are also referred to as bimagic squares, trimagic squares, tetramagic squares, pentamagic squares when the value of P is 2, 3, 4, and 5 respectively.
 
