@@ -7,7 +7,7 @@ main = do
     -- putStr $ show (take 5 arrays) 
     -- putStr $ show (checker $ take 5 arrays)
     let checked = checker arrays
-    writeFile "data/order4-classes.json" (show checked)
+    writeFile "data/order4-classes.txt" (show checked)
   
 
 
@@ -17,12 +17,12 @@ toInts xs = map (\x -> read x::Int) xs
 
 
 checker xs = [
-    "{ 'numbers':" ++ show x ++ ", 'flags': ["
-    ++ (if (isSelfComplementary x) then "'self-compl'" else "")
-    ++ (if (isSymmetric x) then ",'symmetric'" else "")
-    ++ (if (isPanMagic x) then ",'pandiag'" else "")
-    ++ (if (isUltraMagic x) then ",'ultra'" else "")
-    ++ (if (isBordered x) then ",'bordered'" else "")
+    "{ \"numbers\":" ++ show x ++ ", \"flags\": ["
+    ++ (if (isSelfComplementary x) then "\"self-compl\"" else "")
+    ++ (if (isSymmetric x) then ",\"symmetric\"" else "")
+    ++ (if (isPanMagic x) then ",\"pandiag\"" else "")
+    ++ (if (isUltraMagic x) then ",\"ultra\"" else "")
+    ++ (if (isBordered x) then ",\"bordered\"" else "")
     ++ "] }"
     | x <- xs
   ]

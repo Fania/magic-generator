@@ -20,6 +20,9 @@ lsx = [[2,10,19,11,23,12,25,7,18,3,20,15,1,8,21,14,6,16,24,5,17,9,22,4,13],[2,15
 demo :: [Int]
 demo = [2,10,19,11,23,12,25,7,18,3,20,15,1,8,21,14,6,16,24,5,17,9,22,4,13]
 
+sc4 :: [Int]
+sc4 = [1,2,15,16,12,14,3,5,13,7,10,4,8,11,6,9]
+
 o5 :: [Int]
 o5 = [18,22,10,14,1,9,11,3,17,25,2,20,24,6,13,21,8,12,5,19,15,4,16,23,7]
 
@@ -54,7 +57,7 @@ isSinglyEven ms = mod (n+2) 4 == 0
 
 -- Complement is rotation or reflection of original
 isSelfComplementary :: [Int] -> Bool
-isSelfComplementary ms = isMagic $ complement ms
+isSelfComplementary ms = isTransformation ms (complement ms)
 
 -- Do not exist for singly even orders.
 -- Will be self-complimentary too.
@@ -171,16 +174,26 @@ equidistantPairs ms
 
 -- Most-perfect magic square when it is a pandiagonal magic square with two further properties (i) each 2×2 subsquare add to 1/k of the magic constant where n = 4k, and (ii) all pairs of integers distant n/2 along any diagonal (major or broken) are complementary (i.e. they sum to n2 + 1). Only for squares of doubly even order. All pandiagonal squares of order 4 are also most perfect.
 
+-- concentric square
+-- 11 99 50 4 96 95 7 10 92 41 1 12 88 14 86 85 17 83 19 100 98 49 33 77 48 28 74 43 52 3 21 22 23 64 36 35 67 78 79 80 70 69 76 57 45 46 54 25 32 31 30 39 75 47 55 56 44 26 62 71 81 72 38 34 66 65 37 63 29 20 93 59 58 24 53 73 27 68 42 8 40 82 13 87 15 16 84 18 89 61 60 2 51 97 5 6 94 91 9 90
 
-
--- Composite can be partitioned into smaller magic subsquares, wholly or partly, which may or may not overlap with each other. By this definition, bordered magic squares are also composite magic squares.
+-- Composite can be partitioned into smaller magic subsquares, wholly or partly, which may or may not overlap with each other. By this definition, bordered magic squares are also composite magic squares. A magic square of order m · n is called composite, when it can be decomposed into m2 magic subsquares, each of order n. It is to be noted that the minimal composite magic square must be of order n=9. This is the minimal number with two divisors, for which magic squares exist.
 
 
 -- Multimagic remains magic even if all its numbers are replaced by their k-th power for 1 ≤ k ≤ P. They are also known as P-multimagic square or satanic squares. They are also referred to as bimagic squares, trimagic squares, tetramagic squares, pentamagic squares when the value of P is 2, 3, 4, and 5 respectively.
 
+-- symmetrical (associated)
+-- pandiagonal
+-- most-perfect
+-- bordered (concentric)
+-- self-complement
+-- ultramagic
+-- inlaid
+-- composite
+-- bimagic
+-- multimagic
 
-
-
+-- http://www.magic-squares.net/order4list.htm#The%2012%20Groups
 
 -- D4 TRANSFORMATIONS
 
@@ -225,6 +238,15 @@ rotate270 xs = concat $ reverse cols
         rows = getChunks n xs
         cols = transpose rows
 
+isTransformation :: [Int] -> [Int] -> Bool
+isTransformation os ms = elem os [rh,rv,rd1,rd2,r90,r180,r270]
+  where rh = reflectH ms
+        rv = reflectV ms
+        rd1 = reflectD1 ms
+        rd2 = reflectD2 ms
+        r90 = rotate90 ms
+        r180 = rotate180 ms
+        r270 = rotate270 ms
 
 -- identity
 -- 2,10,19,11,23
