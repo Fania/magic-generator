@@ -182,10 +182,9 @@ equidistantPairs ms
 
 -- Multimagic remains magic even if all its numbers are replaced by their k-th power for 1 ≤ k ≤ P. They are also known as P-multimagic square or satanic squares. They are also referred to as bimagic squares, trimagic squares, tetramagic squares, pentamagic squares when the value of P is 2, 3, 4, and 5 respectively.
 
--- symmetrical (associated)
--- pandiagonal
+
 -- most-perfect
--- bordered (concentric)
+
 -- self-complement
 -- ultramagic
 -- inlaid
