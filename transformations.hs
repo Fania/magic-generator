@@ -8,7 +8,8 @@ module Transformations (
   isSymmetric,
   isPanMagic,
   isUltraMagic,
-  isBordered
+  isBordered,
+  elara,asteria,hestia,hera,demeter,niobe,thaumas,nemesis,arges,eris,moros,cottus
 ) where
 
 import Data.List
@@ -193,6 +194,288 @@ equidistantPairs ms
 -- multimagic
 
 -- http://www.magic-squares.net/order4list.htm#The%2012%20Groups
+
+
+
+{-|
+-- --
+-- --
+-- --
+-- --
+-}
+elaraMS :: [Int]
+elaraMS = [16,1,13,4,7,10,6,11,2,15,3,14,9,8,12,5]
+
+elara :: [Int] -> Bool
+elara ms = 
+  cmpl n (ms !! 0) == (ms !! 1) &&
+  cmpl n (ms !! 2) == (ms !! 3) &&
+  cmpl n (ms !! 4) == (ms !! 5) &&
+  cmpl n (ms !! 6) == (ms !! 7) &&
+  cmpl n (ms !! 8) == (ms !! 9) &&
+  cmpl n (ms !! 10) == (ms !! 11) &&
+  cmpl n (ms !! 12) == (ms !! 13) &&
+  cmpl n (ms !! 14) == (ms !! 15)
+  where n = getOrder ms
+
+
+{-|
+\/ \/
+/\ /\
+\/ \/
+/\ /\
+-}
+asteriaMS :: [Int]
+asteriaMS = [1,7,14,12,10,16,5,3,15,9,4,6,8,2,11,13]
+
+asteria :: [Int] -> Bool
+asteria ms = 
+  cmpl n (ms !! 0) == (ms !! 5) &&
+  cmpl n (ms !! 1) == (ms !! 4) &&
+  cmpl n (ms !! 2) == (ms !! 7) &&
+  cmpl n (ms !! 3) == (ms !! 6) &&
+  cmpl n (ms !! 8) == (ms !! 13) &&
+  cmpl n (ms !! 9) == (ms !! 12) &&
+  cmpl n (ms !! 10) == (ms !! 15) &&
+  cmpl n (ms !! 11) == (ms !! 14)
+  where n = getOrder ms
+
+
+{-|
+------
+   ------
+------
+   ------
+------
+   ------
+------
+   ------
+-}
+hestiaMS :: [Int]
+hestiaMS = [4,1,13,16,14,15,3,2,11,10,6,7,5,8,12,9]
+
+hestia :: [Int] -> Bool
+hestia ms = 
+  cmpl n (ms !! 0) == (ms !! 2) &&
+  cmpl n (ms !! 1) == (ms !! 3) &&
+  cmpl n (ms !! 4) == (ms !! 6) &&
+  cmpl n (ms !! 5) == (ms !! 7) &&
+  cmpl n (ms !! 8) == (ms !! 10) &&
+  cmpl n (ms !! 9) == (ms !! 11) &&
+  cmpl n (ms !! 12) == (ms !! 14) &&
+  cmpl n (ms !! 13) == (ms !! 15)
+  where n = getOrder ms
+
+
+{-|
+
+-}
+heraMS :: [Int]
+heraMS = [1,8,10,15,14,11,5,4,7,2,16,9,12,13,3,6]
+
+hera :: [Int] -> Bool
+hera ms = 
+  cmpl n (ms !! 0) == (ms !! 10) &&
+  cmpl n (ms !! 1) == (ms !! 11) &&
+  cmpl n (ms !! 2) == (ms !! 8) &&
+  cmpl n (ms !! 3) == (ms !! 9) &&
+  cmpl n (ms !! 4) == (ms !! 14) &&
+  cmpl n (ms !! 5) == (ms !! 15) &&
+  cmpl n (ms !! 6) == (ms !! 12) &&
+  cmpl n (ms !! 7) == (ms !! 13)
+  where n = getOrder ms
+
+
+{-|
+------------
+   ------
+------------
+   ------
+------------
+   ------
+------------
+   ------
+-}
+demeterMS :: [Int]
+demeterMS = [1,13,4,16,8,12,5,9,14,2,15,3,11,7,10,6]
+
+demeter :: [Int] -> Bool
+demeter ms = 
+  cmpl n (ms !! 0) == (ms !! 3) &&
+  cmpl n (ms !! 1) == (ms !! 2) &&
+  cmpl n (ms !! 4) == (ms !! 7) &&
+  cmpl n (ms !! 5) == (ms !! 6) &&
+  cmpl n (ms !! 8) == (ms !! 11) &&
+  cmpl n (ms !! 9) == (ms !! 10) &&
+  cmpl n (ms !! 12) == (ms !! 15) &&
+  cmpl n (ms !! 13) == (ms !! 14)
+  where n = getOrder ms
+
+
+{-|
+
+-}
+niobeMS :: [Int]
+niobeMS = [1,15,14,4,12,6,7,9,8,10,11,5,13,3,2,16]
+
+niobe :: [Int] -> Bool
+niobe ms = all f ep
+  where ep = equidistantPairs ms
+        n = getOrder ms
+        f = (\x -> (cmpl n $ fst x) == (snd x) )
+
+
+{-|
+---- ----
+  -----
+---------
+  -----
+---------
+---- ----
+-}
+thaumasMS :: [Int]
+thaumasMS = [16,1,12,5,2,11,6,15,7,14,3,10,9,8,13,4]
+
+thaumas :: [Int] -> Bool
+thaumas ms = 
+  cmpl n (ms !! 0) == (ms !! 1) &&
+  cmpl n (ms !! 2) == (ms !! 3) &&
+  cmpl n (ms !! 4) == (ms !! 7) &&
+  cmpl n (ms !! 5) == (ms !! 6) &&
+  cmpl n (ms !! 8) == (ms !! 11) &&
+  cmpl n (ms !! 9) == (ms !! 10) &&
+  cmpl n (ms !! 12) == (ms !! 13) &&
+  cmpl n (ms !! 14) == (ms !! 15)
+  where n = getOrder ms
+
+
+{-|
+------
+  --
+---
+   ---
+---
+   ---
+------
+  --
+-}
+nemesisMS :: [Int]
+nemesisMS = [12,4,13,5,1,9,16,8,15,7,2,10,6,14,3,11]
+
+nemesis :: [Int] -> Bool
+nemesis ms = 
+  cmpl n (ms !! 0) == (ms !! 3) &&
+  cmpl n (ms !! 1) == (ms !! 2) &&
+  cmpl n (ms !! 4) == (ms !! 6) &&
+  cmpl n (ms !! 5) == (ms !! 7) &&
+  cmpl n (ms !! 8) == (ms !! 10) &&
+  cmpl n (ms !! 9) == (ms !! 11) &&
+  cmpl n (ms !! 12) == (ms !! 15) &&
+  cmpl n (ms !! 13) == (ms !! 14)
+  where n = getOrder ms
+
+
+{-|
+-------
+  ---
+--- ---
+--- ---
+-------
+  ---
+-}
+argesMS :: [Int]
+argesMS = [11,14,3,6,8,9,16,1,10,7,2,15,5,4,13,12]
+
+arges :: [Int] -> Bool
+arges ms = 
+  cmpl n (ms !! 0) == (ms !! 3) &&
+  cmpl n (ms !! 1) == (ms !! 2) &&
+  cmpl n (ms !! 4) == (ms !! 5) &&
+  cmpl n (ms !! 6) == (ms !! 7) &&
+  cmpl n (ms !! 8) == (ms !! 9) &&
+  cmpl n (ms !! 10) == (ms !! 11) &&
+  cmpl n (ms !! 12) == (ms !! 15) &&
+  cmpl n (ms !! 13) == (ms !! 14)
+  where n = getOrder ms
+
+
+{-|
+----
+  ----
+----
+  ----
+\ \/ /
+ \/\/
+ /\/\
+/ /\ \
+-}
+erisMS :: [Int]
+erisMS = [1,2,16,15,13,14,4,3,12,7,9,6,8,11,5,10]
+
+eris :: [Int] -> Bool
+eris ms = 
+  cmpl n (ms !! 0) == (ms !! 2) &&
+  cmpl n (ms !! 1) == (ms !! 3) &&
+  cmpl n (ms !! 4) == (ms !! 6) &&
+  cmpl n (ms !! 5) == (ms !! 7) &&
+  cmpl n (ms !! 8) == (ms !! 14) &&
+  cmpl n (ms !! 9) == (ms !! 15) &&
+  cmpl n (ms !! 10) == (ms !! 12) &&
+  cmpl n (ms !! 11) == (ms !! 13)
+  where n = getOrder ms
+
+
+{-|
+----
+  ----
+------
+  --
+------
+  --
+----
+  ----
+-}
+morosMS :: [Int]
+morosMS = [5,1,12,16,10,14,3,7,15,11,6,2,4,8,13,9]
+
+moros :: [Int] -> Bool
+moros ms = 
+  cmpl n (ms !! 0) == (ms !! 2) &&
+  cmpl n (ms !! 1) == (ms !! 3) &&
+  cmpl n (ms !! 4) == (ms !! 7) &&
+  cmpl n (ms !! 5) == (ms !! 6) &&
+  cmpl n (ms !! 8) == (ms !! 11) &&
+  cmpl n (ms !! 9) == (ms !! 10) &&
+  cmpl n (ms !! 12) == (ms !! 14) &&
+  cmpl n (ms !! 13) == (ms !! 15)
+  where n = getOrder ms
+
+
+{-|
+----  ----
+\  /  \  /
+-\/-  -\/-
+ /\    /\
+/  \  /  \
+-}
+cottusMS :: [Int]
+cottusMS = [2,15,1,16,11,10,8,5,14,3,13,4,7,6,12,9]
+
+cottus :: [Int] -> Bool
+cottus ms = 
+  cmpl n (ms !! 0) == (ms !! 1) &&
+  cmpl n (ms !! 2) == (ms !! 3) &&
+  cmpl n (ms !! 4) == (ms !! 13) &&
+  cmpl n (ms !! 5) == (ms !! 12) &&
+  cmpl n (ms !! 6) == (ms !! 15) &&
+  cmpl n (ms !! 7) == (ms !! 14) &&
+  cmpl n (ms !! 8) == (ms !! 9) &&
+  cmpl n (ms !! 10) == (ms !! 11)
+  where n = getOrder ms
+
+
+
+
 
 -- D4 TRANSFORMATIONS
 
