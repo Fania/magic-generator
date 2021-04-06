@@ -15,8 +15,14 @@
 - https://archive.org/details/DeOccultaPhilosophiaLoc1533/page/n163/mode/2up
 - http://esotericarchives.com/agrippa/agrippa2.htm#contents
 - (H.E. Dudeney "Amusements in Mathematics" 1917)[https://www.gutenberg.org/files/16713/16713-h/16713-h.htm]
-- http://budshaw.ca/Download.html
+- **http://budshaw.ca/Download.html** 
 
+Order 5
+Order5		C code
+Makes the 275,305,224 order 5 magic squares.
+Files are output in folder Order5[_n]. There are 25 .txt files, one each for the squares with the same center value. The files contain only the squares in a single column. Numbers are separated by white space characters, (blank, newline).
+WARNING: The files are large, ranging from 341 MB to 1,492 MB, (total 21 GB).
+[Ref](http://budshaw.ca/Download.html)
 
 ## Order
 

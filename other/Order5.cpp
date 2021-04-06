@@ -27,7 +27,7 @@
            total number of squares 275305224, elapsed time  5:15
  */
 
-#include "stdafx.h"
+// #include "stdafx.h"
 #include <conio.h>
 #include <direct.h>
 #include <errno.h>
